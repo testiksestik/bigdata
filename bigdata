@@ -1,0 +1,21 @@
+from pyspark import SparkContext, SparkConf
+
+# Создаем объект SparkConf и указываем имя приложения
+conf = SparkConf().setAppName("BigDataProcessing")
+# Создаем объект SparkContext с использованием SparkConf
+sc = SparkContext(conf=conf)
+
+# Загружаем большой набор данных из файла
+data_rdd = sc.textFile("path/to/big_data.txt")
+
+# Пример обработки данных: подсчет количества строк
+line_count = data_rdd.count()
+print("Количество строк:", line_count)
+
+# Пример обработки данных: подсчет суммы чисел в каждой строке
+sums_rdd = data_rdd.map(lambda line: sum(int(num) for num in line.split()))
+total_sum = sums_rdd.reduce(lambda x, y: x + y)
+print("Общая сумма чисел:", total_sum)
+
+# Завершаем работу SparkContext
+sc.stop()
